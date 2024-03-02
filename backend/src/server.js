@@ -2,31 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const path = require('path');
-const multer = require('multer');
 const knexfile = require('../knexfile.js');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/uploads', express.static('uploads'));
 
 const knexInstance = require('knex')(knexfile.development);
-
-// Multer configuration
-const storage = multer.diskStorage({
-  destination: 'uploads/',
-  filename: (req, file, callback) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const title = req.body.title;
-    callback(
-      null,
-      title + '-' + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
-});
-
-const upload = multer({ storage });
 
 // create table
 async function createMoviesTable() {
@@ -38,7 +20,6 @@ async function createMoviesTable() {
       table.string('title');
       table.string('genre');
       table.integer('year');
-      table.string('poster_image', 1000000);
       table.timestamps(true, true);
     });
     console.log('Movies table created!');
@@ -79,7 +60,7 @@ app.get('/api/movies/:id', async (req, res) => {
 });
 
 // Add movie
-app.post('/api/movies', upload.single('posterImage'), async (req, res) => {
+app.post('/api/movies', async (req, res) => {
   const { title, genre, year } = req.body;
   const requiredFields = { title, genre, year };
 
@@ -89,19 +70,16 @@ app.post('/api/movies', upload.single('posterImage'), async (req, res) => {
     }
   }
 
-  const posterImagePath = req.file ? req.file.path : null;
-
   try {
     const result = await knexInstance
       .insert({
         title,
         genre,
         year,
-        poster_image: posterImagePath,
       })
       .into('movies')
       .returning('*');
-    res.status(201).json(result[0]); // Access the first element of result directly
+    res.status(201).json(result[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -113,7 +91,11 @@ app.delete('/api/movies/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await knexInstance.select('*').from('movies').where({ id }).del();
+    const result = await knexInstance
+      .select('*')
+      .from('movies')
+      .where({ id })
+      .del();
     if (result.length === 0) {
       return res.status(404).json({ error: 'Movie not found' });
     }

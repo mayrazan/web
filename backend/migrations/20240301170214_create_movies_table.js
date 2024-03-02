@@ -8,7 +8,6 @@ exports.up = function (knex) {
     table.string('title').notNullable();
     table.string('genre').notNullable();
     table.integer('year').notNullable();
-    table.string('poster_image', 1000000);
     table.timestamps(true, true);
   });
 };
