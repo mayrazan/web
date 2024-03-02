@@ -10,25 +10,28 @@ app.use(bodyParser.json());
 
 const knexInstance = require('knex')(knexfile.development);
 
-// create table
-async function createMoviesTable() {
+// Drop and create table
+async function recreateMoviesTable() {
   const tableExists = await knexInstance.schema.hasTable('movies');
 
-  if (!tableExists) {
-    await knexInstance.schema.createTable('movies', (table) => {
-      table.increments('id').primary();
-      table.string('title');
-      table.string('genre');
-      table.integer('year');
-      table.timestamps(true, true);
-    });
-    console.log('Movies table created!');
-  } else {
-    console.log('Movies table already exists!');
+  if (tableExists) {
+    // drop table if it exists
+    await knexInstance.schema.dropTable('movies');
+    console.log('Movies table dropped!');
   }
+
+  // create table
+  await knexInstance.schema.createTable('movies', (table) => {
+    table.increments('id').primary();
+    table.string('title');
+    table.string('genre');
+    table.integer('year');
+    table.timestamps(true, true);
+  });
+  console.log('Movies table created!');
 }
 
-createMoviesTable();
+recreateMoviesTable();
 
 // Routes
 
