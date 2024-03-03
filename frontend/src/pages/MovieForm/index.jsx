@@ -20,7 +20,7 @@ const MovieForm = ({ fetchItems }) => {
           year,
         }
       );
-      console.log(response.data);
+      return response.data;
     } catch (error) {
       console.error('Failed to add movie', error);
       setError(error);
@@ -29,6 +29,9 @@ const MovieForm = ({ fetchItems }) => {
       setLoading(false);
       setError(null);
       fetchItems();
+      setTitle('');
+      setGenre('');
+      setYear('');
     }
   }
 
