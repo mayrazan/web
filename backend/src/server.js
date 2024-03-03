@@ -39,7 +39,7 @@ recreateMoviesTable();
 app.get('/api/movies', async (req, res) => {
   try {
     const result = await knexInstance.select('*').from('movies');
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -55,7 +55,7 @@ app.get('/api/movies/:id', async (req, res) => {
     if (result.length === 0) {
       return res.status(404).json({ error: 'Movie not found' });
     }
-    res.json(result[0]);
+    res.status(200).json(result[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
