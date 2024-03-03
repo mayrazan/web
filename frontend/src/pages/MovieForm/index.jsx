@@ -12,15 +12,17 @@ const MovieForm = ({ fetchItems }) => {
   async function handleAddMovie() {
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/movies`,
-        {
+      await axios
+        .post(`${process.env.REACT_APP_API_URL}/movies`, {
           title,
           genre,
           year,
-        }
-      );
-      return response.data;
+        })
+        .then(() => {
+          setTitle('');
+          setGenre('');
+          setYear('');
+        });
     } catch (error) {
       console.error('Failed to add movie', error);
       setError(error);
@@ -29,9 +31,6 @@ const MovieForm = ({ fetchItems }) => {
       setLoading(false);
       setError(null);
       fetchItems();
-      setTitle('');
-      setGenre('');
-      setYear('');
     }
   }
 
@@ -45,36 +44,42 @@ const MovieForm = ({ fetchItems }) => {
       >
         <Form.Item
           label='Title'
-          name='title'
           rules={[{ required: true, message: 'Please input the title!' }]}
+          htmlFor='title'
+          required
         >
           <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             size='large'
+            name='title'
           />
         </Form.Item>
         <Form.Item
           label='Genre'
-          name='genre'
           rules={[{ required: true, message: 'Please input the genre' }]}
+          htmlFor='genre'
+          required
         >
           <Input
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
             size='large'
+            name='genre'
           />
         </Form.Item>
         <Form.Item
           label='Year'
-          name='year'
           rules={[{ required: true, message: 'Please input the year!' }]}
+          htmlFor='year'
+          required
         >
           <InputNumber
             value={year}
             onChange={(value) => setYear(value)}
             type='number'
             size='large'
+            name='year'
           />
         </Form.Item>
 
@@ -89,9 +94,7 @@ const MovieForm = ({ fetchItems }) => {
         </Button>
       </Form>
 
-      {error && (
-        <Typography.Text type='danger'>{error.error}</Typography.Text>
-      )}
+      {error && <Typography.Text type='danger'>{error.error}</Typography.Text>}
     </Flex>
   );
 };

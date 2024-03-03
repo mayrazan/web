@@ -6,7 +6,7 @@ const Movies = ({ movies, setMovies, loading, error }) => {
   async function handleDelete(id) {
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/movies/${id}`);
-      setMovies(movies.filter((movie) => movie.id !== id));
+      setMovies((prevState) => prevState.filter((movie) => movie.id !== id));
     } catch (error) {
       console.error(`Failed to delete movie with id ${id}`, error);
     }
@@ -20,7 +20,12 @@ const Movies = ({ movies, setMovies, loading, error }) => {
         isEmpty={!movies.length}
         error={error}
       >
-        <Flex gap='middle' align='center' wrap='wrap'>
+        <Flex
+          gap='middle'
+          align='center'
+          wrap='wrap'
+          style={{ padding: '0 50px 50px 50px' }}
+        >
           {movies.map((movie) => {
             return (
               <Card
@@ -48,7 +53,12 @@ export default Movies;
 function SkeletonLoadingWrapper({ children, loading, isEmpty, error }) {
   if (loading) {
     return (
-      <Flex gap='middle' align='center' wrap='wrap'>
+      <Flex
+        gap='middle'
+        align='center'
+        wrap='wrap'
+        style={{ padding: '0 50px 50px 50px' }}
+      >
         {[...Array(10).keys()].map((index) => {
           return (
             <Card key={index} style={{ width: 300 }} loading={true}>
