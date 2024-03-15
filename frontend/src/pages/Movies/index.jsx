@@ -5,7 +5,10 @@ import { Button, Card, Flex, Typography, Empty } from 'antd';
 const Movies = ({ movies, setMovies, loading, error }) => {
   async function handleDelete(id) {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/movies/${id}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(`${process.env.REACT_APP_API_URL}/movies/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setMovies((prevState) => prevState.filter((movie) => movie.id !== id));
     } catch (error) {
       console.error(`Failed to delete movie with id ${id}`, error);

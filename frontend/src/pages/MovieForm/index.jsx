@@ -12,11 +12,16 @@ const MovieForm = ({ fetchItems }) => {
   async function handleAddMovie() {
     setLoading(true);
     try {
+      const token = localStorage.getItem('token')
       await axios
         .post(`${process.env.REACT_APP_API_URL}/movies`, {
           title,
           genre,
           year,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         })
         .then(() => {
           setTitle('');
