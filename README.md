@@ -66,7 +66,7 @@
 #### For the frontend, you need to set the following environment variable:
 
 - `REACT_APP_API_URL`: Set this to `https://web-2xdz.onrender.com/api` or `http://localhost:3001/api`
-- `REACT_APP_AUTHENTICATION_URL`: Set this to `https://web-2xdz.onrender.com` or `http://localhost:3001`
+- `REACT_APP_MANAGE_URL`: Set this to `https://web-2xdz.onrender.com/auth` or `http://localhost:3001/auth`
 
 _Note: The backend is deployed on the above service. If you want to test running locally, replace the URL with your backend localhost. It would probably be `http://localhost:3001/api`._
 

@@ -161,7 +161,7 @@ app.delete('/api/movies/:id', authenticateToken, async (req, res) => {
 });
 
 // register user
-app.post('/register', async (req, res) => {
+app.post('/auth/register', async (req, res) => {
   try {
     const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -174,7 +174,7 @@ app.post('/register', async (req, res) => {
 });
 
 // login user
-app.post('/login', async (req, res) => {
+app.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await knexInstance('users').where({ username }).first();
@@ -195,7 +195,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Get all users
-app.get('/users', authenticateToken, async (req, res) => {
+app.get('/api/users', authenticateToken, async (req, res) => {
   try {
     const users = await knexInstance('users').select('*');
     res.json(users);
@@ -206,7 +206,7 @@ app.get('/users', authenticateToken, async (req, res) => {
 });
 
 // Get user by id
-app.get('/users/:id', authenticateToken, async (req, res) => {
+app.get('/api/users/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   try {
     const user = await knexInstance('users').where({ id }).first();
@@ -222,7 +222,7 @@ app.get('/users/:id', authenticateToken, async (req, res) => {
 });
 
 // Delete user
-app.delete('/users/:id', authenticateToken, async (req, res) => {
+app.delete('/api/users/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   try {
     const user = await knexInstance('users').where({ id }).first();
