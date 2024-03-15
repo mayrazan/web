@@ -12,7 +12,7 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_AUTHENTICATION_URL}/login`,
+        `${process.env.REACT_APP_MANAGE_URL}/login`,
         values
       );
       localStorage.setItem('token', response.data.token);

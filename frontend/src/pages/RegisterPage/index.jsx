@@ -12,7 +12,7 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       await axios.post(
-        `${process.env.REACT_APP_AUTHENTICATION_URL}/register`,
+        `${process.env.REACT_APP_MANAGE_URL}/register`,
         values
       );
       messageApi.success({ content: 'Registered successfully' });
